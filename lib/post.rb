@@ -50,7 +50,7 @@ class Post < Sequel::Model
 	end
 
 	def self.make_slug(title)
-		title.downcase.gsub(/ /, '_').gsub(/[^a-z0-9_]/, '').squeeze('_')
+		title.downcase.gsub(/[ _]/, '-').gsub(/[^a-z0-9\-]/, '').squeeze('-')
 	end
 
 	########

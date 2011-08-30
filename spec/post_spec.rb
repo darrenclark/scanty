@@ -40,8 +40,9 @@ describe Post do
 	end
 
 	it "generates a slug from the title (but saved to db on first pass so that url never changes)" do
-		Post.make_slug("RestClient 0.8").should == 'restclient_08'
-		Post.make_slug("Rushmate, rush + TextMate").should == 'rushmate_rush_textmate'
-		Post.make_slug("Object-Oriented File Manipulation").should == 'objectoriented_file_manipulation'
+		Post.make_slug("RestClient 0.8").should == 'restclient-08'
+		Post.make_slug("Rushmate, rush + TextMate").should == 'rushmate-rush-textmate'
+		Post.make_slug("Object-Oriented File Manipulation").should == 'object-oriented-file-manipulation'
+		Post.make_slug("Nifty preg_replace tricks").should == 'nifty-preg-replace-tricks'
 	end
 end
