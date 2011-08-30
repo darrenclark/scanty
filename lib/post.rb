@@ -60,14 +60,19 @@ class Post < Sequel::Model
 		noncode = []
 		code_block = nil
 		markdown.split("\n").each do |line|
-			if !code_block and line.strip.downcase == '<code>'
-				out << Maruku.new(noncode.join("\n")).to_html
+			if !code_block and line.downcase.include? "<code>"
+			    start_index = line.downcase.index("<code>")
+		        end_index = start_index + "<code>".length
+				out << Maruku.new(noncode.join("\n") + line[0, start_index]).to_html
 				noncode = []
-				code_block = []
-			elsif code_block and line.strip.downcase == '</code>'
+				code_block = [line[end_index..-1]]
+			elsif code_block and line.downcase.include? "</code>"
+			    start_index = line.downcase.index("</code>")
+                end_index = start_index + "</code>".length
+	            code_block << line[0..start_index-1]
 				convertor = Syntax::Convertors::HTML.for_syntax "ruby"
 				highlighted = convertor.convert(code_block.join("\n"))
-				out << "<code>#{highlighted}</code>"
+				out << "<code>#{highlighted}</code>" + Maruku.new(line[end_index..-1]).to_html
 				code_block = nil
 			elsif code_block
 				code_block << line
