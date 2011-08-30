@@ -54,3 +54,7 @@ task :import => :environment do
 		DB[:posts] << post
 	end
 end
+
+task :spec do
+  system "rspec -Ivendor/sequel spec/"
+end
