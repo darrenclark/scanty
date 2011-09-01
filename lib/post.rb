@@ -17,8 +17,7 @@ class Post < Sequel::Model
 	end
 
 	def url
-		d = created_at
-		"/past/#{d.year}/#{d.month}/#{d.day}/#{slug}/"
+		"/#{slug}"
 	end
 
 	def full_url

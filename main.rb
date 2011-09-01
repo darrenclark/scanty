@@ -48,17 +48,6 @@ get '/' do
 	erb :index, :locals => { :posts => posts }, :layout => false
 end
 
-get '/past/:year/:month/:day/:slug/' do
-	post = Post.filter(:slug => params[:slug]).first
-	halt [ 404, "Page not found" ] unless post
-	@title = post.title
-	erb :post, :locals => { :post => post }
-end
-
-get '/past/:year/:month/:day/:slug' do
-	redirect "/past/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:slug]}/", 301
-end
-
 get '/past' do
 	posts = Post.reverse_order(:created_at)
 	@title = "Archive"
@@ -105,14 +94,14 @@ post '/posts' do
 	redirect post.url
 end
 
-get '/past/:year/:month/:day/:slug/edit' do
+get '/:slug/edit' do
 	auth
 	post = Post.filter(:slug => params[:slug]).first
 	halt [ 404, "Page not found" ] unless post
 	erb :edit, :locals => { :post => post, :url => post.url }
 end
 
-post '/past/:year/:month/:day/:slug/' do
+post '/:slug' do
 	auth
 	post = Post.filter(:slug => params[:slug]).first
 	halt [ 404, "Page not found" ] unless post
@@ -123,3 +112,17 @@ post '/past/:year/:month/:day/:slug/' do
 	redirect post.url
 end
 
+### Post handling  
+### (let the above have higher priority, so that Sinatra doesn't
+### call these thinking the above are slugs)
+
+get '/:slug' do
+	post = Post.filter(:slug => params[:slug]).first
+	halt [ 404, "Page not found" ] unless post
+	@title = post.title
+	erb :post, :locals => { :post => post }
+end
+
+get '/:slug/' do
+	redirect "/#{params[:slug]}", 301
+end
