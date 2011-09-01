@@ -29,7 +29,7 @@ describe Post do
 
 	it "makes the tags into links to the tag search" do
 		@post.tags = "one two"
-		@post.linked_tags.should == '<a href="/past/tags/one">one</a> <a href="/past/tags/two">two</a>'
+		@post.linked_tags.should == '<a href="/tags/one">one</a> <a href="/tags/two">two</a>'
 	end
 
 	it "can save itself (primary key is set up)" do

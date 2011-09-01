@@ -44,7 +44,7 @@ class Post < Sequel::Model
 
 	def linked_tags
 		tags.split.inject([]) do |accum, tag|
-			accum << "<a href=\"/past/tags/#{tag}\">#{tag}</a>"
+			accum << "<a href=\"/tags/#{tag}\">#{tag}</a>"
 		end.join(" ")
 	end
 
