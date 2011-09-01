@@ -48,7 +48,7 @@ get '/' do
 	erb :index, :locals => { :posts => posts }, :layout => false
 end
 
-get '/past' do
+get '/archive' do
 	posts = Post.reverse_order(:created_at)
 	@title = "Archive"
 	erb :archive, :locals => { :posts => posts }
