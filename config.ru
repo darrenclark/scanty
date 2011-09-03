@@ -12,7 +12,17 @@ map '/' do
 end
 
 map '/assets' do
-	sprockets_env = Sprockets::Environment.new
+    class NoCacheSprockets < Sprockets::Environment
+        def find_asset(path, options = {})
+            self.class.superclass.superclass.instance_method(:find_asset).bind(self).call(path, options)
+        end
+        
+        def not_modified?(asset,env)
+            false
+        end
+    end
+    
+	sprockets_env = settings.environment == :development ? NoCacheSprockets.new : Sprockets::Environment.new
 	sprockets_env.append_path 'assets/javascripts'
 	sprockets_env.append_path 'assets/stylesheets'
 	run sprockets_env
