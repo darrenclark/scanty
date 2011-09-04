@@ -1,3 +1,4 @@
 *.log
 blog.db
 .sass-cache
+Gemfile.lock
