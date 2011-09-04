@@ -1,7 +1,4 @@
-require File.dirname(__FILE__) + '/../vendor/maruku/maruku'
-
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../vendor/syntax'
-require 'syntax/convertors/html'
+require 'markdown'
 
 class Post < Sequel::Model
 	unless table_exists?
@@ -55,32 +52,7 @@ class Post < Sequel::Model
 	########
 
 	def to_html(markdown)
-		out = []
-		noncode = []
-		code_block = nil
-		markdown.split("\n").each do |line|
-			if !code_block and line.downcase.include? "<code>"
-				start_index = line.downcase.index("<code>")
-				end_index = start_index + "<code>".length
-				out << Maruku.new(noncode.join("\n") + line[0, start_index]).to_html
-				noncode = []
-				code_block = [line[end_index..-1]]
-			elsif code_block and line.downcase.include? "</code>"
-				start_index = line.downcase.index("</code>")
-				end_index = start_index + "</code>".length
-				code_block << line[0..start_index-1]
-				convertor = Syntax::Convertors::HTML.for_syntax "ruby"
-				highlighted = convertor.convert(code_block.join("\n"))
-				out << "<code>#{highlighted}</code>" + Maruku.new(line[end_index..-1]).to_html
-				code_block = nil
-			elsif code_block
-				code_block << line
-			else
-				noncode << line
-			end
-		end
-		out << Maruku.new(noncode.join("\n")).to_html
-		out.join("\n")
+		Scanty.markdown(markdown)
 	end
 
 	def split_content(string)
