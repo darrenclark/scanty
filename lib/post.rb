@@ -42,7 +42,7 @@ class Post < Sequel::Model
 	def linked_tags
 		tags.split.inject([]) do |accum, tag|
 			accum << "<a href=\"/tags/#{tag}\">#{tag}</a>"
-		end.join(" ")
+		end.join(", ")
 	end
 
 	def self.make_slug(title)
